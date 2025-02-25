@@ -3,103 +3,186 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Máy Tính Giải Thích</title>
+    <title>Máy Tính Giải Thích - Nâng Cao</title>
+    <!-- Import phông chữ Lobster -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      /* Reset cơ bản */
+      * {
+        box-sizing: border-box;
+      }
       body {
-        font-family: Arial, sans-serif;
-        background-color: #eef2f5;
-        padding: 20px;
-        text-align: center;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ece9e6, #ffffff);
+        font-family: "Lobster", cursive;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-attachment: fixed;
       }
       .container {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         max-width: 600px;
-        margin: auto;
-        background: #fff;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-      .expression-input {
         width: 90%;
-        padding: 10px;
-        font-size: 22px;
+        animation: fadeIn 1.5s ease-out;
+      }
+      h1 {
+        text-align: center;
+        font-size: 3rem;
+        margin-bottom: 30px;
+        color: #5a5a5a;
+      }
+      /* Vùng nhập liệu dùng contenteditable */
+      .expression-input {
+        width: 100%;
+        min-height: 60px;
+        padding: 20px;
+        font-size: 2rem;
         text-align: right;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      .btn {
-        padding: 10px 20px;
-        font-size: 18px;
-        background-color: #4caf50;
-        color: #fff;
+        margin-bottom: 30px;
         border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-bottom: 20px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        outline: none;
       }
-      .result {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 15px;
-      }
-      .explanation {
-        text-align: left;
-        background: #f9f9f9;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 18px;
-        line-height: 1.6;
-      }
-      /* Style cho bàn phím ảo */
       .keyboard {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 20px;
+        gap: 15px;
+        margin-bottom: 15px;
       }
       .key {
-        padding: 15px;
-        font-size: 18px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #fff;
+        padding: 20px;
+        font-size: 1.8rem;
+        border: none;
+        border-radius: 10px;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
+        background: linear-gradient(145deg, #e0e0e0, #ffffff);
+        box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
+        user-select: none;
       }
       .key:hover {
-        background-color: #f0f0f0;
+        transform: scale(1.05);
+        box-shadow: 2px 2px 5px #bebebe, -2px -2px 5px #ffffff;
       }
+      /* Các phím đặc biệt */
       .key.operator {
-        background-color: #dfefff;
+        background: linear-gradient(145deg, #d1c4e9, #b39ddb);
+        color: #3e2723;
+        font-weight: bold;
       }
       .key.clear {
-        background-color: #ffcdd2;
+        background: linear-gradient(145deg, #ffcdd2, #ef9a9a);
+        color: #b71c1c;
+        font-weight: bold;
+      }
+      /* Phím thoát số mũ */
+      .key.exit {
+        background: linear-gradient(145deg, #c8e6c9, #a5d6a7);
+        color: #1b5e20;
+        font-weight: bold;
+      }
+      .btn {
+        width: 100%;
+        padding: 20px;
+        font-size: 2rem;
+        font-family: "Lobster", cursive;
+        background: linear-gradient(135deg, #ff8a65, #ff7043);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s, box-shadow 0.3s;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .btn:hover {
+        background: linear-gradient(135deg, #ff7043, #ff8a65);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .result {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #424242;
+      }
+      .explanation {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        font-size: 1.6rem;
+        line-height: 1.6;
+        color: #555;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+        .expression-input {
+          font-size: 1.8rem;
+        }
+        .key {
+          font-size: 1.5rem;
+          padding: 15px;
+        }
+        .btn {
+          font-size: 1.8rem;
+          padding: 15px;
+        }
+        .result {
+          font-size: 1.8rem;
+        }
+        .explanation {
+          font-size: 1.4rem;
+        }
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Máy Tính Giải Tích</h1>
-      <input
-        type="text"
+      <h1>Máy Tính Giải Thích</h1>
+      <!-- Vùng nhập liệu dùng contenteditable -->
+      <div
         id="expression"
         class="expression-input"
-        placeholder="Nhập biểu thức (ví dụ: 3x3÷9 hoặc 3^3)"
-      />
+        contenteditable="true"
+      ></div>
+
       <!-- Bàn phím ảo -->
       <div class="keyboard" id="keyboard">
         <!-- Hàng 1 -->
         <div class="key" data-value="7">7</div>
         <div class="key" data-value="8">8</div>
         <div class="key" data-value="9">9</div>
-        <div class="key operator" data-value="/">÷</div>
+        <div class="key operator" data-value="÷">÷</div>
         <!-- Hàng 2 -->
         <div class="key" data-value="4">4</div>
         <div class="key" data-value="5">5</div>
         <div class="key" data-value="6">6</div>
-        <div class="key operator" data-value="*">×</div>
+        <div class="key operator" data-value="x">x</div>
         <!-- Hàng 3 -->
         <div class="key" data-value="1">1</div>
         <div class="key" data-value="2">2</div>
@@ -111,11 +194,16 @@
         <div class="key" data-value="(">(</div>
         <div class="key" data-value=")">)</div>
         <!-- Hàng 5 -->
-        <div class="key operator" data-value="√(">√</div>
-        <div class="key operator" data-value="^">x<sup>?</sup></div>
+        <div class="key operator" data-value="√">√</div>
+        <div class="key operator" data-value="power">x<sup>n</sup></div>
         <div class="key operator" data-value="+">+</div>
-        <div class="key clear" id="clearKey">C</div>
+        <div class="key clear" data-value="clear">C</div>
+        <!-- Hàng 6: Phím thoát số mũ -->
+        <div class="key exit" data-value="exitSup" style="grid-column: span 4">
+          ↘ Thoát số mũ
+        </div>
       </div>
+
       <button class="btn" id="calculateBtn">Tính Toán</button>
       <div class="result">Kết quả: <span id="result"></span></div>
       <div class="explanation">
@@ -123,61 +211,160 @@
         <div id="explanation"></div>
       </div>
     </div>
+
     <script>
-      /* Hàm chuyển đổi biểu thức gốc sang dạng hiển thị đẹp hơn:
-         - Thay "√(" thành "√"
-         - Thay "*" (hoặc "x") thành "×"
-         - Thay "/" thành "÷"
-         - Chuyển a^b thành a<sup>b</sup>
-      */
-      function formatExprForDisplay(expr) {
-        let formatted = expr;
-        formatted = formatted.replace(/√\(/g, "√");
-        // Nếu người dùng nhập "x" (chữ thường) hoặc "*" thì hiển thị là "×"
-        formatted = formatted.replace(/(\*)|x/gi, "×");
-        // Chuyển "/" thành "÷"
-        formatted = formatted.replace(/\//g, "÷");
-        // Chuyển đổi lũy thừa: ví dụ "3^3" thành "3<sup>3</sup>"
-        formatted = formatted.replace(/(\d+)\^(\d+)/g, "$1<sup>$2</sup>");
-        return formatted;
+      // Lưu vị trí con trỏ (range) trong vùng contenteditable
+      let savedRange = null;
+      const expressionDiv = document.getElementById("expression");
+
+      // Cập nhật vị trí con trỏ khi có sự thay đổi
+      function saveSelection() {
+        const sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+          savedRange = sel.getRangeAt(0);
+        }
+      }
+      expressionDiv.addEventListener("mouseup", saveSelection);
+      expressionDiv.addEventListener("keyup", saveSelection);
+      expressionDiv.addEventListener("focus", saveSelection);
+
+      // Hàm chèn một phần tử (element) vào vị trí con trỏ
+      function insertAtCursorElement(element) {
+        const sel = window.getSelection();
+        let range;
+        if (sel.rangeCount > 0) {
+          range = sel.getRangeAt(0);
+        } else if (savedRange) {
+          range = savedRange;
+        } else {
+          range = document.createRange();
+          range.selectNodeContents(expressionDiv);
+          range.collapse(false);
+        }
+        range.deleteContents();
+        range.insertNode(element);
+        // Nếu element có nội dung, đặt con trỏ bên trong; nếu không, đặt sau element
+        if (element.childNodes.length > 0) {
+          range.selectNodeContents(element);
+          range.collapse(false);
+        } else {
+          range.setStartAfter(element);
+          range.collapse(true);
+        }
+        sel.removeAllRanges();
+        sel.addRange(range);
+        savedRange = range;
       }
 
-      // Xử lý nút bàn phím ảo
-      const keys = document.querySelectorAll(".key");
-      const expressionInput = document.getElementById("expression");
+      // Hàm chèn HTML (chuỗi) tại vị trí con trỏ
+      function insertAtCursor(html) {
+        const sel = window.getSelection();
+        let range;
+        if (sel.rangeCount > 0) {
+          range = sel.getRangeAt(0);
+        } else if (savedRange) {
+          range = savedRange;
+        } else {
+          range = document.createRange();
+          range.selectNodeContents(expressionDiv);
+          range.collapse(false);
+        }
+        range.deleteContents();
+        const el = document.createElement("div");
+        el.innerHTML = html;
+        const frag = document.createDocumentFragment();
+        let node, lastNode;
+        while ((node = el.firstChild)) {
+          lastNode = frag.appendChild(node);
+        }
+        range.insertNode(frag);
+        if (lastNode) {
+          range.setStartAfter(lastNode);
+          range.collapse(true);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+        savedRange = range;
+      }
 
-      keys.forEach((key) => {
-        key.addEventListener("click", () => {
-          const value = key.getAttribute("data-value");
-          if (key.classList.contains("clear")) {
-            expressionInput.value = "";
-          } else {
-            expressionInput.value += value;
+      // Hàm di chuyển con trỏ ra ngoài thẻ <sup> nếu đang bên trong
+      function exitSuperscript() {
+        const sel = window.getSelection();
+        if (sel.rangeCount === 0) return;
+        let range = sel.getRangeAt(0);
+        let node = range.startContainer;
+        while (node && node !== expressionDiv) {
+          if (node.nodeName.toLowerCase() === "sup") {
+            let newRange = document.createRange();
+            newRange.setStartAfter(node);
+            newRange.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(newRange);
+            savedRange = newRange;
+            break;
           }
-          expressionInput.focus();
+          node = node.parentNode;
+        }
+      }
+
+      // Ngăn mất focus của vùng contenteditable khi nhấn phím ảo
+      const keys = document.querySelectorAll(".key");
+      keys.forEach((key) => {
+        key.addEventListener("mousedown", (e) => {
+          e.preventDefault();
         });
       });
 
-      // Hàm tính toán
-      function calculate() {
-        let expression = expressionInput.value.trim();
-        // Chuyển các ký hiệu hiển thị sang dạng toán học:
-        // - Thay "x" (hoặc "×") thành "*" (trừ trường hợp lũy thừa)
-        // - Thay "÷" thành "/"
-        expression = expression
-          .replace(/×/g, "*")
-          .replace(/x(?!\^)/g, "*")
-          .replace(/÷/g, "/");
-        // Chuyển đổi căn: "√(" thành "Math.sqrt("
-        expression = expression.replace(/√\(/g, "Math.sqrt(");
-        // Chuyển đổi lũy thừa: "^" -> "**"
-        expression = expression.replace(/\^/g, "**");
+      // Xử lý sự kiện cho các phím ảo
+      keys.forEach((key) => {
+        key.addEventListener("click", () => {
+          const value = key.getAttribute("data-value");
+          if (value === "clear") {
+            expressionDiv.innerHTML = "";
+            savedRange = null;
+          } else if (value === "power") {
+            // Chèn thẻ <sup> với ký tự zero-width space và đặt con trỏ bên trong
+            const supEl = document.createElement("sup");
+            supEl.innerHTML = "&#8203;"; // zero-width space
+            insertAtCursorElement(supEl);
+          } else if (value === "exitSup") {
+            exitSuperscript();
+          } else {
+            insertAtCursor(value);
+          }
+          expressionDiv.focus();
+        });
+      });
 
+      // Hàm lấy nội dung dạng văn bản từ contenteditable,
+      // chuyển <sup>...</sup> thành ký hiệu '^' (nếu không rỗng) để tính toán
+      function getExpressionPlainText() {
+        let html = expressionDiv.innerHTML;
+        let text = html.replace(/<sup>(.*?)<\/sup>/g, function (match, p1) {
+          // Loại bỏ zero-width space và khoảng trắng
+          let cleaned = p1.replace(/\u200B|&#8203;/g, "").trim();
+          return cleaned ? "^" + cleaned : "";
+        });
+        text = text.replace(/<[^>]*>/g, "");
+        return text;
+      }
+
+      // Hàm tính toán:
+      // - Chuyển "x" thành "*" (nhân), "÷" thành "/" (chia)
+      // - Chuyển "^" thành "**" (lũy thừa)
+      // - Chuyển "√(" thành "Math.sqrt(" nếu cần
+      function calculate() {
+        let expression = getExpressionPlainText();
+        expression = expression
+          .replace(/x/g, "*")
+          .replace(/÷/g, "/")
+          .replace(/\^/g, "**")
+          .replace(/√\(/g, "Math.sqrt(");
         try {
           const result = eval(expression);
           document.getElementById("result").innerText = result;
           document.getElementById("explanation").innerHTML =
-            generateDetailedExplanation(expressionInput.value.trim(), result);
+            generateDetailedExplanation(getExpressionPlainText(), result);
         } catch (error) {
           document.getElementById("result").innerText = "Lỗi!";
           document.getElementById("explanation").innerText =
@@ -188,217 +375,14 @@
       document
         .getElementById("calculateBtn")
         .addEventListener("click", calculate);
-      expressionInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-          calculate();
-        }
-      });
 
-      // Hàm giải thích chi tiết theo từng trường hợp
+      // Hàm giải thích đơn giản
       function generateDetailedExplanation(expr, result) {
-        let steps = "";
-        const exprNoSpace = expr.replace(/\s+/g, "");
-
-        // Tạo biểu thức chuẩn để xác định loại phép toán
-        let normalizedExpr = exprNoSpace;
-        // Nếu người dùng nhập "x" (nhân) hay "×", chuyển về "*"
-        normalizedExpr = normalizedExpr.replace(/x/gi, "*").replace(/×/g, "*");
-        // Nếu nhập "÷" chuyển về "/"
-        normalizedExpr = normalizedExpr.replace(/÷/g, "/");
-
-        // Chuẩn hóa hiển thị
-        let formattedExpr = formatExprForDisplay(expr);
-
-        // Xác định các loại phép toán có trong biểu thức
-        const operatorSet = new Set();
-        if (normalizedExpr.includes("+")) operatorSet.add("+");
-        if (normalizedExpr.includes("-")) operatorSet.add("-");
-        if (normalizedExpr.includes("*")) operatorSet.add("*");
-        if (normalizedExpr.includes("/")) operatorSet.add("/");
-        if (normalizedExpr.includes("^")) operatorSet.add("^");
-        if (normalizedExpr.includes("Math.sqrt")) operatorSet.add("√");
-
-        // Nếu biểu thức chỉ chứa các phép nhân và chia (với 2 hoặc nhiều toán tử)
-        if (/^[\d\.]+([*/][\d\.]+)+$/.test(normalizedExpr)) {
-          let tokens = normalizedExpr.split(/([*/])/);
-          if (tokens.length > 3) {
-            let stepCount = 1;
-            steps += `<strong>Bước ${stepCount}:</strong> Xác định dãy số và phép toán: ${formattedExpr}.<br>`;
-            stepCount++;
-            let intermediate = Number(tokens[0]);
-            for (let i = 1; i < tokens.length; i += 2) {
-              let operator = tokens[i];
-              let operand = Number(tokens[i + 1]);
-              let opDisplay = operator === "*" ? "×" : "÷";
-              let newIntermediate =
-                operator === "*"
-                  ? intermediate * operand
-                  : intermediate / operand;
-              steps += `<strong>Bước ${stepCount}:</strong> Tính: ${intermediate} ${opDisplay} ${operand} = ${newIntermediate}.<br>`;
-              intermediate = newIntermediate;
-              stepCount++;
-            }
-            steps += `<em>Kết quả cuối cùng sau khi tính từ trái sang phải là ${result}.</em>`;
-            return steps;
-          }
-        }
-
-        // Nếu biểu thức có nhiều loại phép toán
-        if (operatorSet.size > 1) {
-          return `Biểu thức "${formattedExpr}" có nhiều loại phép toán và được tính theo thứ tự ưu tiên: dấu ngoặc () → lũy thừa → căn bậc → nhân/chia (từ trái sang phải) → cộng/trừ. Kết quả cuối cùng là ${result}.`;
-        }
-
-        // Nếu chỉ có 1 loại phép toán, xử lý chi tiết từng trường hợp:
-
-        // PHÉP CỘNG
-        if (
-          normalizedExpr.includes("+") &&
-          !/[–\-*\/^√]/.test(normalizedExpr.replace(/\+/g, ""))
-        ) {
-          let parts = expr.split("+").map((item) => item.trim());
-          if (parts.length === 2) {
-            steps += `<strong>Bước 1:</strong> Xác định các số cần cộng: ${parts[0]} và ${parts[1]}.<br>`;
-            steps += `<strong>Bước 2:</strong> Tính tổng: ${parts[0]} + ${parts[1]} = ${result}.<br>`;
-            steps += `<em>Nghĩa là, khi cộng ${parts[0]} và ${parts[1]}, ta được ${result}.</em>`;
-          } else if (parts.length > 2) {
-            steps += `<strong>Bước 1:</strong> Xác định các số cần cộng: ${parts.join(
-              " + "
-            )}.<br>`;
-            let sum = Number(parts[0]);
-            for (let i = 1; i < parts.length; i++) {
-              let current = Number(parts[i]);
-              let newSum = sum + current;
-              steps += `<strong>Bước ${
-                i + 1
-              }:</strong> Tính: ${sum} + ${current} = ${newSum}.<br>`;
-              sum = newSum;
-            }
-            steps += `<em>Nghĩa là, khi cộng theo thứ tự các số ${parts.join(
-              " + "
-            )}, ta được ${result}.</em>`;
-          }
-          return steps;
-        }
-        // PHÉP TRỪ
-        else if (
-          normalizedExpr.includes("-") &&
-          !/[\+\*\/^√]/.test(normalizedExpr.replace(/\-/g, ""))
-        ) {
-          let parts = expr.split("-").map((item) => item.trim());
-          if (parts.length === 2) {
-            steps += `<strong>Bước 1:</strong> Xác định số ban đầu và số cần trừ: ${parts[0]} và ${parts[1]}.<br>`;
-            steps += `<strong>Bước 2:</strong> Tính hiệu: ${parts[0]} - ${parts[1]} = ${result}.<br>`;
-            steps += `<em>Nghĩa là, khi trừ ${parts[1]} từ ${parts[0]}, ta được ${result}.</em>`;
-          } else if (parts.length > 2) {
-            steps += `<strong>Bước 1:</strong> Xác định các số cần trừ: ${parts.join(
-              " - "
-            )}.<br>`;
-            let diff = Number(parts[0]);
-            for (let i = 1; i < parts.length; i++) {
-              let current = Number(parts[i]);
-              let newDiff = diff - current;
-              steps += `<strong>Bước ${
-                i + 1
-              }:</strong> Tính: ${diff} - ${current} = ${newDiff}.<br>`;
-              diff = newDiff;
-            }
-            steps += `<em>Kết quả cuối cùng khi trừ theo thứ tự các số ${parts.join(
-              " - "
-            )}, ta được ${result}.</em>`;
-          }
-          return steps;
-        }
-        // PHÉP NHÂN (chỉ chứa "*" hoặc "×")
-        else if (
-          normalizedExpr.includes("*") &&
-          !/[\+\-\/^√]/.test(normalizedExpr.replace(/\*/g, ""))
-        ) {
-          let parts = expr.split("*").map((item) => item.trim());
-          if (parts.length === 2) {
-            steps += `<strong>Bước 1:</strong> Xác định các số cần nhân: ${parts[0]} và ${parts[1]}.<br>`;
-            steps += `<strong>Bước 2:</strong> Tính tích: ${parts[0]} × ${parts[1]} = ${result}.<br>`;
-            steps += `<em>Nghĩa là, khi nhân ${parts[0]} với ${parts[1]}, ta được ${result}.</em>`;
-          } else if (parts.length > 2) {
-            let allSame = parts.every(
-              (item) => Number(item) === Number(parts[0])
-            );
-            if (allSame) {
-              let base = parts[0];
-              let exponent = parts.length;
-              steps += `<strong>Bước 1:</strong> Xác định các số cần nhân: ${parts.join(
-                " × "
-              )}.<br>`;
-              steps += `<strong>Bước 2:</strong> Nhận thấy tất cả các số đều giống nhau (cơ số = ${base}). Do đó, biểu thức có thể viết dưới dạng lũy thừa: ${base}<sup>${exponent}</sup>.<br>`;
-              steps += `<strong>Bước 3:</strong> Tính lũy thừa: ${base}<sup>${exponent}</sup> = ${result}.<br>`;
-              steps += `<em>Nghĩa là, khi nhân ${exponent} số ${base} với nhau, ta được ${result}.</em>`;
-            } else {
-              steps += `<strong>Bước 1:</strong> Xác định các số cần nhân: ${parts.join(
-                " × "
-              )}.<br>`;
-              let intermediate = Number(parts[0]);
-              for (let i = 1; i < parts.length; i++) {
-                let current = Number(parts[i]);
-                let product = intermediate * current;
-                steps += `<strong>Bước ${
-                  i + 1
-                }:</strong> Tính: ${intermediate} × ${current} = ${product}.<br>`;
-                intermediate = product;
-              }
-              steps += `<em>Nghĩa là, khi nhân theo thứ tự các số ${parts.join(
-                " × "
-              )}, ta được ${result}.</em>`;
-            }
-          }
-          return steps;
-        }
-        // PHÉP CHIA (chỉ chứa "/" hoặc "÷")
-        else if (normalizedExpr.includes("/")) {
-          let parts = expr.split("/").map((item) => item.trim());
-          if (parts.length === 2) {
-            steps += `<strong>Bước 1:</strong> Xác định số bị chia và số chia: ${parts[0]} và ${parts[1]}.<br>`;
-            steps += `<strong>Bước 2:</strong> Tính: ${parts[0]} ÷ ${parts[1]} = ${result}.<br>`;
-            steps += `<em>Nghĩa là, khi chia ${parts[0]} cho ${parts[1]}, ta được ${result}.</em>`;
-          } else if (parts.length > 2) {
-            steps += `<strong>Bước 1:</strong> Xác định các số cần chia: ${parts.join(
-              " ÷ "
-            )}.<br>`;
-            let div = Number(parts[0]);
-            for (let i = 1; i < parts.length; i++) {
-              let current = Number(parts[i]);
-              let newDiv = div / current;
-              steps += `<strong>Bước ${
-                i + 1
-              }:</strong> Tính: ${div} ÷ ${current} = ${newDiv}.<br>`;
-              div = newDiv;
-            }
-            steps += `<em>Nghĩa là, khi chia theo thứ tự các số ${parts.join(
-              " ÷ "
-            )}, ta được ${result}.</em>`;
-          }
-          return steps;
-        }
-        // PHÉP LUỶ THỪA (sử dụng "^")
-        else if (normalizedExpr.includes("^")) {
-          let parts = expr.split("^").map((item) => item.trim());
-          steps += `<strong>Bước 1:</strong> Xác định cơ số và số mũ: cơ số = ${parts[0]}, số mũ = ${parts[1]}.<br>`;
-          steps += `<strong>Bước 2:</strong> Điều này có nghĩa là nhân ${parts[0]} với chính nó ${parts[1]} lần (tức có ${parts[1]} số ${parts[0]} nhân nhau).<br>`;
-          steps += `<strong>Bước 3:</strong> Tính lũy thừa: ${parts[0]}<sup>${parts[1]}</sup> = ${result}.<br>`;
-          steps += `<em>Nghĩa là, khi nhân ${parts[0]} với chính nó ${parts[1]} lần, ta được ${result}.</em>`;
-          return steps;
-        }
-        // PHÉP CĂN BẬC HAI
-        else if (normalizedExpr.includes("Math.sqrt")) {
-          const match = expr.match(/√\(([^)]+)\)/);
-          if (match) {
-            const num = match[1].trim();
-            steps += `<strong>Bước 1:</strong> Xác định số cần lấy căn: ${num}.<br>`;
-            steps += `<strong>Bước 2:</strong> Tìm số mà khi nhân với chính nó cho ra ${num} (ví dụ, √${num} = ${result} vì ${result} × ${result} = ${num}).<br>`;
-            steps += `<em>Nghĩa là, căn bậc hai của ${num} là ${result}.</em>`;
-            return steps;
-          }
-        }
-
-        return `Biểu thức "${formattedExpr}" được tính theo quy tắc toán học cơ bản và kết quả là ${result}.`;
+        const formattedExpr = expr
+          .replace(/\*/g, "×")
+          .replace(/\//g, "÷")
+          .replace(/\^/g, "<sup>");
+        return `Biểu thức "${formattedExpr}" được tính và kết quả là ${result}.`;
       }
     </script>
   </body>
